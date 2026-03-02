@@ -10,6 +10,7 @@ interface CreateWorkoutPlanInput {
     weekDay: WeekDay;
     isRestDay: boolean;
     estimatedDurationInSeconds: number;
+    coverImageUrl?: string | null;
     exercises: {
       order: number;
       name: string;

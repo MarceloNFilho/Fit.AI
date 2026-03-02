@@ -21,6 +21,7 @@ export async function workoutPlanRoutes(app: FastifyInstance) {
             weekDay: z.enum(WeekDay),
             isRestDay: z.boolean().default(false),
             estimatedDurationInSeconds: z.number().min(1),
+            coverImageUrl: z.string().url().nullish(),
             exercises: z.array(
               z.object({
                 name: z.string().trim().min(1),

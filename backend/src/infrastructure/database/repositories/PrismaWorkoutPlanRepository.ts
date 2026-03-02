@@ -39,6 +39,7 @@ export class PrismaWorkoutPlanRepository implements WorkoutPlanRepository {
             weekDay: day.weekDay,
             isRestDay: day.isRestDay,
             estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+            coverImageUrl: day.coverImageUrl,
             exercises: {
               create: day.exercises.map((exercise) => ({
                 name: exercise.name,
