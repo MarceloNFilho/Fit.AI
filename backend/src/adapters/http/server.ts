@@ -11,6 +11,7 @@ import {
 import { authRoutes } from "./routes/auth.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
 import { homeRoutes } from "./routes/home.routes.js";
+import { statsRoutes } from "./routes/stats.routes.js";
 import { workoutPlanRoutes } from "./routes/workout-plan.routes.js";
 
 export async function createServer() {
@@ -66,6 +67,7 @@ export async function createServer() {
   await app.register(homeRoutes);
   await app.register(authRoutes);
   await app.register(healthRoutes);
+  await app.register(statsRoutes, { prefix: "/stats" });
 
   return app;
 }
