@@ -1,5 +1,8 @@
 import type { WorkoutSession } from "../../../domain/entities/WorkoutSession.js";
-import type { WorkoutSessionRepository } from "../../../domain/ports/repositories/WorkoutSessionRepository.js";
+import type {
+  UpdateWorkoutSessionInput,
+  WorkoutSessionRepository,
+} from "../../../domain/ports/repositories/WorkoutSessionRepository.js";
 import { prisma } from "../prisma.js";
 
 export class PrismaWorkoutSessionRepository implements WorkoutSessionRepository {
@@ -13,12 +16,30 @@ export class PrismaWorkoutSessionRepository implements WorkoutSessionRepository 
     return session as WorkoutSession | null;
   }
 
+  async findById(id: string): Promise<WorkoutSession | null> {
+    const session = await prisma.workoutSession.findUnique({ where: { id } });
+
+    return session as WorkoutSession | null;
+  }
+
   async create(workoutDayId: string, startedAt: Date): Promise<WorkoutSession> {
     const session = await prisma.workoutSession.create({
       data: {
         workoutDayId,
         startedAt,
       },
+    });
+
+    return session as WorkoutSession;
+  }
+
+  async update(
+    id: string,
+    input: UpdateWorkoutSessionInput,
+  ): Promise<WorkoutSession> {
+    const session = await prisma.workoutSession.update({
+      where: { id },
+      data: { completedAt: input.completedAt },
     });
 
     return session as WorkoutSession;
