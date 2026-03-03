@@ -66,6 +66,23 @@ export interface WorkoutDayWithDetails {
   sessions: WorkoutSessionOutput[];
 }
 
+export interface WorkoutDayFull {
+  id: string;
+  name: string;
+  weekDay: WeekDay;
+  isRestDay: boolean;
+  coverImageUrl: string | null;
+  estimatedDurationInSeconds: number;
+  exercises: WorkoutExerciseOutput[];
+}
+
+export interface WorkoutPlanWithDetails {
+  id: string;
+  name: string;
+  isActive: boolean;
+  workoutDays: WorkoutDayFull[];
+}
+
 export interface WorkoutPlanRepository {
   findActiveByUserId(userId: string): Promise<WorkoutPlan | null>;
   deactivate(id: string): Promise<void>;
@@ -76,4 +93,8 @@ export interface WorkoutPlanRepository {
     planId: string,
     dayId: string,
   ): Promise<WorkoutDayWithDetails | null>;
+  findManyByUserId(
+    userId: string,
+    filters?: { active?: boolean },
+  ): Promise<WorkoutPlanWithDetails[]>;
 }

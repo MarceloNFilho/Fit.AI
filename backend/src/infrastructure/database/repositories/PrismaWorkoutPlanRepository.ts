@@ -7,6 +7,7 @@ import type {
   WorkoutDayWithDetails,
   WorkoutPlanRepository,
   WorkoutPlanWithCount,
+  WorkoutPlanWithDetails,
 } from "../../../domain/ports/repositories/WorkoutPlanRepository.js";
 import { prisma } from "../prisma.js";
 
@@ -154,5 +155,48 @@ export class PrismaWorkoutPlanRepository implements WorkoutPlanRepository {
           : null,
       })),
     };
+  }
+
+  async findManyByUserId(
+    userId: string,
+    filters?: { active?: boolean },
+  ): Promise<WorkoutPlanWithDetails[]> {
+    const plans = await prisma.workoutPlan.findMany({
+      where: {
+        userId,
+        ...(filters?.active === true && { isActive: true }),
+      },
+      include: {
+        workoutDays: {
+          include: {
+            exercises: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return plans.map((plan) => ({
+      id: plan.id,
+      name: plan.name,
+      isActive: plan.isActive,
+      workoutDays: plan.workoutDays.map((day) => ({
+        id: day.id,
+        name: day.name,
+        weekDay: day.weekDay as WeekDay,
+        isRestDay: day.isRestDay,
+        coverImageUrl: day.coverImageUrl ?? null,
+        estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+        exercises: day.exercises.map((exercise) => ({
+          id: exercise.id,
+          name: exercise.name,
+          order: exercise.order,
+          sets: exercise.sets,
+          reps: exercise.reps,
+          restTimeInSeconds: exercise.restTimeInSeconds,
+          workoutDayId: exercise.workoutDayId,
+        })),
+      })),
+    }));
   }
 }

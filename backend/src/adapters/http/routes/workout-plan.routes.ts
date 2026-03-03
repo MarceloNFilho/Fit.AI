@@ -5,6 +5,7 @@ import z from "zod";
 import { CreateWorkoutPlan } from "../../../application/usecases/CreateWorkoutPlan.js";
 import { GetWorkoutDay } from "../../../application/usecases/GetWorkoutDay.js";
 import { GetWorkoutPlan } from "../../../application/usecases/GetWorkoutPlan.js";
+import { GetWorkoutPlans } from "../../../application/usecases/GetWorkoutPlans.js";
 import { StartWorkoutSession } from "../../../application/usecases/StartWorkoutSession.js";
 import { UpdateWorkoutSession } from "../../../application/usecases/UpdateWorkoutSession.js";
 import { WeekDay } from "../../../domain/enums/WeekDay.js";
@@ -96,6 +97,83 @@ export async function workoutPlanRoutes(app: FastifyInstance) {
           return;
         }
         reply.status(500).send({
+          message: "Internal server error",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/workout-plans",
+    schema: {
+      tags: ["Workout Plan"],
+      summary: "List workout plans",
+      querystring: z.object({
+        active: z
+          .enum(["true", "false"])
+          .transform((v) => v === "true")
+          .optional(),
+      }),
+      response: {
+        200: z.object({
+          workoutPlans: z.array(
+            z.object({
+              id: z.uuid(),
+              name: z.string(),
+              isActive: z.boolean(),
+              workoutDays: z.array(
+                z.object({
+                  id: z.uuid(),
+                  name: z.string(),
+                  weekDay: z.enum(WeekDay),
+                  isRestDay: z.boolean(),
+                  coverImageUrl: z.string().url().nullable(),
+                  estimatedDurationInSeconds: z.number(),
+                  exercises: z.array(
+                    z.object({
+                      id: z.uuid(),
+                      name: z.string(),
+                      order: z.number(),
+                      sets: z.number(),
+                      reps: z.number(),
+                      restTimeInSeconds: z.number(),
+                      workoutDayId: z.uuid(),
+                    }),
+                  ),
+                }),
+              ),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        500: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      try {
+        const session = await authMiddleware(request, reply);
+        if (!session) return;
+
+        const workoutPlanRepository = new PrismaWorkoutPlanRepository();
+        const getWorkoutPlans = new GetWorkoutPlans(workoutPlanRepository);
+
+        const result = await getWorkoutPlans.execute({
+          userId: session.user.id,
+          active: request.query.active,
+        });
+
+        return reply.status(200).send(result);
+      } catch (error) {
+        app.log.error(error);
+        return reply.status(500).send({
           message: "Internal server error",
           code: "INTERNAL_SERVER_ERROR",
         });
