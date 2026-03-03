@@ -10,6 +10,7 @@ import {
 
 import { authRoutes } from "./routes/auth.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
+import { homeRoutes } from "./routes/home.routes.js";
 import { workoutPlanRoutes } from "./routes/workout-plan.routes.js";
 
 export async function createServer() {
@@ -62,6 +63,7 @@ export async function createServer() {
 
   // Register route modules
   await app.register(workoutPlanRoutes);
+  await app.register(homeRoutes);
   await app.register(authRoutes);
   await app.register(healthRoutes);
 

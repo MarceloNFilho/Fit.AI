@@ -7,6 +7,7 @@ export interface WorkoutDay {
   weekDay: WeekDay;
   isRestDay: boolean;
   estimatedDurationInSeconds: number;
+  coverImageUrl: string | null;
   workoutPlanId: string;
   exercises: WorkoutExercise[];
   createdAt: Date;
