@@ -3,6 +3,8 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 
 import { CreateWorkoutPlan } from "../../../application/usecases/CreateWorkoutPlan.js";
+import { GetWorkoutDay } from "../../../application/usecases/GetWorkoutDay.js";
+import { GetWorkoutPlan } from "../../../application/usecases/GetWorkoutPlan.js";
 import { StartWorkoutSession } from "../../../application/usecases/StartWorkoutSession.js";
 import { UpdateWorkoutSession } from "../../../application/usecases/UpdateWorkoutSession.js";
 import { WeekDay } from "../../../domain/enums/WeekDay.js";
@@ -250,6 +252,178 @@ export async function workoutPlanRoutes(app: FastifyInstance) {
           workoutDayId: request.params.workoutDayId,
           sessionId: request.params.sessionId,
           completedAt: request.body.completedAt,
+        });
+
+        return reply.status(200).send(result);
+      } catch (error) {
+        app.log.error(error);
+        if (error instanceof NotFoundError) {
+          return reply.status(404).send({
+            message: error.message,
+            code: "NOT_FOUND",
+          });
+        }
+        if (error instanceof ForbiddenError) {
+          return reply.status(403).send({
+            message: error.message,
+            code: "FORBIDDEN",
+          });
+        }
+        return reply.status(500).send({
+          message: "Internal server error",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/workout-plans/:id",
+    schema: {
+      tags: ["Workout Plan"],
+      summary: "Get a workout plan by ID",
+      params: z.object({
+        id: z.uuid(),
+      }),
+      response: {
+        200: z.object({
+          id: z.uuid(),
+          name: z.string(),
+          workoutDays: z.array(
+            z.object({
+              id: z.uuid(),
+              name: z.string(),
+              weekDay: z.enum(WeekDay),
+              isRestDay: z.boolean(),
+              coverImageUrl: z.string().url().nullable(),
+              estimatedDurationInSeconds: z.number(),
+              exercisesCount: z.number(),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        500: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      try {
+        const session = await authMiddleware(request, reply);
+        if (!session) return;
+
+        const workoutPlanRepository = new PrismaWorkoutPlanRepository();
+        const getWorkoutPlan = new GetWorkoutPlan(workoutPlanRepository);
+
+        const result = await getWorkoutPlan.execute({
+          userId: session.user.id,
+          workoutPlanId: request.params.id,
+        });
+
+        return reply.status(200).send(result);
+      } catch (error) {
+        app.log.error(error);
+        if (error instanceof NotFoundError) {
+          return reply.status(404).send({
+            message: error.message,
+            code: "NOT_FOUND",
+          });
+        }
+        if (error instanceof ForbiddenError) {
+          return reply.status(403).send({
+            message: error.message,
+            code: "FORBIDDEN",
+          });
+        }
+        return reply.status(500).send({
+          message: "Internal server error",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "GET",
+    url: "/workout-plans/:planId/days/:dayId",
+    schema: {
+      tags: ["Workout Plan"],
+      summary: "Get a workout day with exercises and sessions",
+      params: z.object({
+        planId: z.uuid(),
+        dayId: z.uuid(),
+      }),
+      response: {
+        200: z.object({
+          id: z.uuid(),
+          name: z.string(),
+          weekDay: z.enum(WeekDay),
+          isRestDay: z.boolean(),
+          coverImageUrl: z.string().url().nullable(),
+          estimatedDurationInSeconds: z.number(),
+          exercises: z.array(
+            z.object({
+              id: z.uuid(),
+              name: z.string(),
+              order: z.number(),
+              sets: z.number(),
+              reps: z.number(),
+              restTimeInSeconds: z.number(),
+              workoutDayId: z.uuid(),
+            }),
+          ),
+          sessions: z.array(
+            z.object({
+              id: z.uuid(),
+              workoutDayId: z.uuid(),
+              startedAt: z.iso.datetime(),
+              completedAt: z.iso.datetime().nullable(),
+            }),
+          ),
+        }),
+        401: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        500: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      try {
+        const session = await authMiddleware(request, reply);
+        if (!session) return;
+
+        const workoutPlanRepository = new PrismaWorkoutPlanRepository();
+        const getWorkoutDay = new GetWorkoutDay(workoutPlanRepository);
+
+        const result = await getWorkoutDay.execute({
+          userId: session.user.id,
+          workoutPlanId: request.params.planId,
+          workoutDayId: request.params.dayId,
         });
 
         return reply.status(200).send(result);

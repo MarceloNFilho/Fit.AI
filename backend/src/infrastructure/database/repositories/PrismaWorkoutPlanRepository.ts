@@ -1,7 +1,12 @@
+import dayjs from "dayjs";
+
 import type { WorkoutPlan } from "../../../domain/entities/WorkoutPlan.js";
+import type { WeekDay } from "../../../domain/enums/WeekDay.js";
 import type {
   CreateWorkoutPlanInput,
+  WorkoutDayWithDetails,
   WorkoutPlanRepository,
+  WorkoutPlanWithCount,
 } from "../../../domain/ports/repositories/WorkoutPlanRepository.js";
 import { prisma } from "../prisma.js";
 
@@ -77,5 +82,77 @@ export class PrismaWorkoutPlanRepository implements WorkoutPlanRepository {
     });
 
     return plan as WorkoutPlan | null;
+  }
+
+  async findById(id: string): Promise<WorkoutPlanWithCount | null> {
+    const plan = await prisma.workoutPlan.findUnique({
+      where: { id },
+      include: {
+        workoutDays: {
+          include: {
+            _count: { select: { exercises: true } },
+          },
+        },
+      },
+    });
+
+    if (!plan) return null;
+
+    return {
+      id: plan.id,
+      name: plan.name,
+      userId: plan.userId,
+      workoutDays: plan.workoutDays.map((day) => ({
+        id: day.id,
+        name: day.name,
+        weekDay: day.weekDay as WeekDay,
+        isRestDay: day.isRestDay,
+        coverImageUrl: day.coverImageUrl ?? null,
+        estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+        exercisesCount: day._count.exercises,
+      })),
+    };
+  }
+
+  async findDayById(
+    planId: string,
+    dayId: string,
+  ): Promise<WorkoutDayWithDetails | null> {
+    const day = await prisma.workoutDay.findFirst({
+      where: { id: dayId, workoutPlanId: planId },
+      include: {
+        exercises: true,
+        workoutSessions: true,
+      },
+    });
+
+    if (!day) return null;
+
+    return {
+      id: day.id,
+      name: day.name,
+      weekDay: day.weekDay as WeekDay,
+      isRestDay: day.isRestDay,
+      coverImageUrl: day.coverImageUrl ?? null,
+      estimatedDurationInSeconds: day.estimatedDurationInSeconds,
+      workoutPlanId: day.workoutPlanId,
+      exercises: day.exercises.map((exercise) => ({
+        id: exercise.id,
+        name: exercise.name,
+        order: exercise.order,
+        sets: exercise.sets,
+        reps: exercise.reps,
+        restTimeInSeconds: exercise.restTimeInSeconds,
+        workoutDayId: exercise.workoutDayId,
+      })),
+      sessions: day.workoutSessions.map((session) => ({
+        id: session.id,
+        workoutDayId: session.workoutDayId,
+        startedAt: dayjs(session.startedAt).toISOString(),
+        completedAt: session.completedAt
+          ? dayjs(session.completedAt).toISOString()
+          : null,
+      })),
+    };
   }
 }
