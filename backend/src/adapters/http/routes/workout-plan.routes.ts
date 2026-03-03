@@ -3,9 +3,16 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import z from "zod";
 
 import { CreateWorkoutPlan } from "../../../application/usecases/CreateWorkoutPlan.js";
+import { StartWorkoutSession } from "../../../application/usecases/StartWorkoutSession.js";
 import { WeekDay } from "../../../domain/enums/WeekDay.js";
 import { PrismaWorkoutPlanRepository } from "../../../infrastructure/database/repositories/PrismaWorkoutPlanRepository.js";
-import { NotFoundError } from "../../../shared/errors/index.js";
+import { PrismaWorkoutSessionRepository } from "../../../infrastructure/database/repositories/PrismaWorkoutSessionRepository.js";
+import {
+  ForbiddenError,
+  NotFoundError,
+  WorkoutPlanNotActiveError,
+  WorkoutSessionAlreadyStartedError,
+} from "../../../shared/errors/index.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 export async function workoutPlanRoutes(app: FastifyInstance) {
@@ -13,6 +20,8 @@ export async function workoutPlanRoutes(app: FastifyInstance) {
     method: "POST",
     url: "/workout-plans",
     schema: {
+      tags: ["Workout Plan"],
+      summary: "Create a workout plan",
       body: z.object({
         name: z.string().trim().min(1),
         workoutDays: z.array(
@@ -84,6 +93,99 @@ export async function workoutPlanRoutes(app: FastifyInstance) {
           return;
         }
         reply.status(500).send({
+          message: "Internal server error",
+          code: "INTERNAL_SERVER_ERROR",
+        });
+      }
+    },
+  });
+
+  app.withTypeProvider<ZodTypeProvider>().route({
+    method: "POST",
+    url: "/workout-plans/:workoutPlanId/days/:workoutDayId/sessions",
+    schema: {
+      tags: ["Workout Plan"],
+      summary: "Start a workout session",
+      params: z.object({
+        workoutPlanId: z.uuid(),
+        workoutDayId: z.uuid(),
+      }),
+      response: {
+        201: z.object({
+          workoutSessionId: z.uuid(),
+        }),
+        401: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        403: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        404: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        409: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        422: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+        500: z.object({
+          message: z.string(),
+          code: z.string(),
+        }),
+      },
+    },
+    handler: async (request, reply) => {
+      try {
+        const session = await authMiddleware(request, reply);
+        if (!session) return;
+
+        const workoutPlanRepository = new PrismaWorkoutPlanRepository();
+        const workoutSessionRepository = new PrismaWorkoutSessionRepository();
+        const startWorkoutSession = new StartWorkoutSession(
+          workoutPlanRepository,
+          workoutSessionRepository,
+        );
+
+        const result = await startWorkoutSession.execute({
+          userId: session.user.id,
+          workoutPlanId: request.params.workoutPlanId,
+          workoutDayId: request.params.workoutDayId,
+        });
+
+        return reply.status(201).send(result);
+      } catch (error) {
+        app.log.error(error);
+        if (error instanceof NotFoundError) {
+          return reply.status(404).send({
+            message: error.message,
+            code: "NOT_FOUND",
+          });
+        }
+        if (error instanceof ForbiddenError) {
+          return reply.status(403).send({
+            message: error.message,
+            code: "FORBIDDEN",
+          });
+        }
+        if (error instanceof WorkoutPlanNotActiveError) {
+          return reply.status(422).send({
+            message: error.message,
+            code: "WORKOUT_PLAN_NOT_ACTIVE",
+          });
+        }
+        if (error instanceof WorkoutSessionAlreadyStartedError) {
+          return reply.status(409).send({
+            message: error.message,
+            code: "WORKOUT_SESSION_ALREADY_STARTED",
+          });
+        }
+        return reply.status(500).send({
           message: "Internal server error",
           code: "INTERNAL_SERVER_ERROR",
         });
