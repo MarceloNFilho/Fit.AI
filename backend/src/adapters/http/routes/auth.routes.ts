@@ -5,6 +5,9 @@ import { auth } from "../../../infrastructure/auth/better-auth.js";
 export async function authRoutes(app: FastifyInstance) {
   app.route({
     method: ["GET", "POST"],
+    schema: {
+      hide: true,
+    },
     url: "/api/auth/*",
     async handler(request, reply) {
       try {

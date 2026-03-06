@@ -12,6 +12,7 @@ export const homeRoutes = async (app: FastifyInstance) => {
     method: "GET",
     url: "/home/:date",
     schema: {
+      operationId: "getHome",
       tags: ["Home"],
       summary: "Get home screen data for the authenticated user",
       params: z.object({
