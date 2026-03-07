@@ -41,7 +41,7 @@ export async function BottomNav({ activePage }: BottomNavProps = {}) {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-6 rounded-t-[20px] border border-border bg-background px-6 pt-4 pb-[max(1rem,_env(safe-area-inset-bottom))]">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-6 rounded-t-[20px] border border-border bg-background px-6 pt-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       {navItems.map(({ key, href, icon: Icon, isCenter }) =>
         isCenter ? (
           <ChatTrigger key={key} />

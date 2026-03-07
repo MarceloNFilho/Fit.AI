@@ -17,7 +17,7 @@ const AuthPage = async () => {
   }
 
   return (
-    <div className="relative min-h-dvh bg-auth-bg overflow-hidden">
+    <div className="relative h-dvh bg-auth-bg overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         <Image
           alt=""
@@ -32,7 +32,7 @@ const AuthPage = async () => {
         <Image src="/fit-ai-logo.svg" alt="FIT.AI" fill />
       </div>
 
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-10 px-5 flex flex-col gap-[60px] items-center">
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-[max(2.5rem,env(safe-area-inset-bottom))] px-5 flex flex-col gap-[60px] items-center">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="text-[32px] leading-[1.05] font-semibold text-primary-foreground text-center w-full font-inter-tight">
             O app que vai transformar a forma como você treina.
