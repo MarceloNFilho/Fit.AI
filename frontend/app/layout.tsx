@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Anton, Geist, Geist_Mono, Inter, Inter_Tight } from "next/font/google";
 import { Suspense } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
@@ -34,6 +34,10 @@ const anton = Anton({
 export const metadata: Metadata = {
   title: "Fit.AI",
   description: "Fit.AI",
+};
+
+export const viewport: Viewport = {
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

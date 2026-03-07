@@ -51,7 +51,7 @@ export default async function WorkoutPlanPage({
   );
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-background pb-24">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
       <div className="relative flex h-[296px] w-full flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pb-10 pt-5">
         <div className="absolute inset-0 pointer-events-none">
           <Image
