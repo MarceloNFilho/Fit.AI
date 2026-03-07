@@ -8,6 +8,7 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod";
 
+import { aiRoutes } from "./routes/ai.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
 import { homeRoutes } from "./routes/home.routes.js";
@@ -70,6 +71,7 @@ export async function createServer() {
   await app.register(authRoutes);
   await app.register(healthRoutes);
   await app.register(statsRoutes, { prefix: "/stats" });
+  await app.register(aiRoutes);
 
   return app;
 }
