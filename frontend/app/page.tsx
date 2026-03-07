@@ -9,6 +9,7 @@ import { ConsistencyWeek } from "./_components/consistency-week";
 import { WorkoutDayCard } from "./_components/workout-day-card";
 import { Button } from "@/components/ui/button";
 import { User } from "lucide-react";
+import { RestDayCard } from "./workout-plans/[planId]/_components/rest-day-card";
 
 export default async function Home() {
   const session = await authClient.getSession({
@@ -120,7 +121,7 @@ export default async function Home() {
             Ver treinos
           </button>
         </div>
-        {todayWorkoutDay && !todayWorkoutDay.isRest && (
+        {todayWorkoutDay && !todayWorkoutDay.isRest ? (
           <Link
             href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
             className="w-full"
@@ -135,6 +136,8 @@ export default async function Home() {
               coverImageUrl={todayWorkoutDay.coverImageUrl}
             />
           </Link>
+        ) : (
+          <RestDayCard weekDay={todayWorkoutDay?.weekDay ?? ""} />
         )}
       </div>
 
