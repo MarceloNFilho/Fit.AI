@@ -17,7 +17,7 @@ const AuthPage = async () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-auth-bg overflow-hidden">
+    <div className="relative h-screen bg-auth-bg overflow-hidden">
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         <Image
           alt=""
