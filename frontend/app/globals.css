@@ -152,11 +152,11 @@
   }
   html {
     @apply font-sans;
-    min-height: 100vh;
+    min-height: 100dvh;
   }
   body {
     @apply bg-background text-foreground;
-    min-height: 100vh;
+    min-height: 100dvh;
     overscroll-behavior: none;
   }
 }

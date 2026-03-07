@@ -56,7 +56,7 @@ export default async function StatsPage() {
   console.log(statsResponse.data);
 
   return (
-    <div className="flex min-h-screen flex-col items-center bg-background pb-24">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
       <div className="flex h-14 w-full items-center px-5">
         <p className="text-[22px] font-normal uppercase leading-[1.15] text-foreground font-anton">
           Fit.ai

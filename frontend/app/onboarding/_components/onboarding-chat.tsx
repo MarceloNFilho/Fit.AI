@@ -59,7 +59,7 @@ export function OnboardingChat() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-dvh flex-col bg-background">
       <div className="flex shrink-0 items-center justify-between border-b border-border p-5">
         <div className="flex items-center gap-2">
           <div className="flex items-center justify-center rounded-full border border-primary/8 bg-primary/8 p-3">
