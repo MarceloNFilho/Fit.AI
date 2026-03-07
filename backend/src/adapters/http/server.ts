@@ -8,6 +8,7 @@ import {
   validatorCompiler,
 } from "fastify-type-provider-zod";
 
+import { env } from "../../infrastructure/env.js";
 import { aiRoutes } from "./routes/ai.js";
 import { authRoutes } from "./routes/auth.routes.js";
 import { healthRoutes } from "./routes/health.routes.js";
@@ -33,8 +34,8 @@ export async function createServer() {
       },
       servers: [
         {
-          description: "localhost",
-          url: `http://localhost:${process.env.PORT}`,
+          description: "API Base URL",
+          url: env.API_BASE_URL,
         },
       ],
     },
@@ -42,7 +43,7 @@ export async function createServer() {
   });
 
   await app.register(fastifyCors, {
-    origin: ["http://localhost:3000"],
+    origin: [env.WEB_APP_BASE_URL],
     credentials: true,
   });
 
