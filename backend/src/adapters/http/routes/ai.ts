@@ -1,4 +1,4 @@
-import { google } from "@ai-sdk/google";
+import { anthropic } from "@ai-sdk/anthropic";
 import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 import type { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -93,7 +93,7 @@ export const aiRoutes = async (app: FastifyInstance) => {
       const messages = request.body.messages as unknown as UIMessage[];
 
       const result = streamText({
-        model: google("gemini-2.5-pro"),
+        model: anthropic("claude-3-haiku-20240307"),
         system: SYSTEM_PROMPT,
         tools: {
           getUserTrainData: {
