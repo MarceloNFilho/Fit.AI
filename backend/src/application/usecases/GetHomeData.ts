@@ -3,8 +3,6 @@ import utc from "dayjs/plugin/utc.js";
 
 import { WeekDay } from "../../domain/enums/WeekDay.js";
 import type { HomeRepository } from "../../domain/ports/repositories/HomeRepository.js";
-import { NotFoundError } from "../../shared/errors/index.js";
-
 dayjs.extend(utc);
 
 const WEEKDAY_MAP: Record<number, WeekDay> = {
@@ -39,7 +37,7 @@ interface ConsistencyEntry {
 }
 
 interface OutputDto {
-  activeWorkoutPlanId: string;
+  activeWorkoutPlanId: string | null;
   todayWorkoutDay: TodayWorkoutDayDto | null;
   workoutStreak: number;
   consistencyByDay: Record<string, ConsistencyEntry>;
@@ -52,10 +50,6 @@ export class GetHomeData {
     const workoutPlan = await this.homeRepository.findActiveWorkoutPlan(
       dto.userId,
     );
-
-    if (!workoutPlan) {
-      throw new NotFoundError("No active workout plan found");
-    }
 
     const date = dayjs.utc(dto.date);
     const weekStart = date.startOf("week").startOf("day");
@@ -87,6 +81,15 @@ export class GetHomeData {
         consistencyByDay[key].workoutDayCompleted = true;
       }
     });
+
+    if (!workoutPlan) {
+      return {
+        activeWorkoutPlanId: null,
+        todayWorkoutDay: null,
+        workoutStreak: 0,
+        consistencyByDay,
+      };
+    }
 
     const todayWeekDay = WEEKDAY_MAP[date.day()];
     const todayDay = workoutPlan.workoutDays.find(

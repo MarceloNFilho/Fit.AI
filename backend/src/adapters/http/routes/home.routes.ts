@@ -20,7 +20,7 @@ export const homeRoutes = async (app: FastifyInstance) => {
       }),
       response: {
         200: z.object({
-          activeWorkoutPlanId: z.uuid(),
+          activeWorkoutPlanId: z.uuid().nullable(),
           todayWorkoutDay: z
             .object({
               workoutPlanId: z.uuid(),
