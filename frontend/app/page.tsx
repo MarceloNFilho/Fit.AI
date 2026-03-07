@@ -102,9 +102,9 @@ export default async function Home() {
           <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
             Consistência
           </p>
-          <button className="text-xs leading-[1.4] text-primary font-inter-tight">
+          <Link href="/stats" className="text-xs leading-[1.4] text-primary font-inter-tight">
             Ver histórico
-          </button>
+          </Link>
         </div>
         <ConsistencyWeek
           consistencyByDay={consistencyByDay}
@@ -117,9 +117,14 @@ export default async function Home() {
           <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
             Treino de Hoje
           </p>
-          <button className="text-xs leading-[1.4] text-primary font-inter-tight">
-            Ver treinos
-          </button>
+          {todayWorkoutDay && (
+            <Link
+              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}`}
+              className="text-xs leading-[1.4] text-primary font-inter-tight"
+            >
+              Ver treinos
+            </Link>
+          )}
         </div>
         {todayWorkoutDay && !todayWorkoutDay.isRest ? (
           <Link
