@@ -18,8 +18,22 @@ import { statsRoutes } from "./routes/stats.routes.js";
 import { workoutPlanRoutes } from "./routes/workout-plan.routes.js";
 
 export async function createServer() {
+  const envToLogger = {
+    development: {
+      transport: {
+        target: "pino-pretty",
+        options: {
+          translateTime: "HH:MM:ss Z",
+          ignore: "pid,hostname",
+        },
+      },
+    },
+    production: true,
+    test: false,
+  };
+
   const app = Fastify({
-    logger: true,
+    logger: envToLogger[env.NODE_ENV],
   });
 
   app.setValidatorCompiler(validatorCompiler);
