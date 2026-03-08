@@ -17,37 +17,64 @@ const AuthPage = async () => {
   }
 
   return (
-    <div className="relative min-h-dvh bg-auth-bg overflow-hidden md:flex md:flex-col md:items-center md:justify-center">
-      <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
-        <Image
-          alt=""
-          src="/login-bg.png"
-          fill
-          className="object-contain object-center max-md:scale-150"
-          priority
-        />
-      </div>
-
-      <div className="absolute left-1/2 -translate-x-1/2 top-[48px] w-[85px] h-[38px] md:hidden">
-        <Image src="/fit-ai-logo.svg" alt="FIT.AI" fill />
-      </div>
-
-      <div className="hidden md:block relative mb-8">
-        <Image src="/fit-ai-logo.svg" alt="FIT.AI" width={85} height={38} />
-      </div>
-
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-[max(2.5rem,env(safe-area-inset-bottom))] px-5 flex flex-col gap-[60px] items-center md:relative md:bottom-auto md:left-auto md:translate-x-0 md:rounded-[20px] md:pb-10">
-        <div className="flex flex-col gap-6 items-center w-full">
-          <p className="text-[32px] leading-[1.05] font-semibold text-primary-foreground text-center w-full font-inter-tight">
-            O app que vai transformar a forma como você treina.
-          </p>
-          <AuthButton />
+    <>
+      <div className="relative min-h-dvh bg-auth-bg overflow-hidden md:hidden">
+        <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
+          <Image
+            alt=""
+            src="/login-bg.png"
+            fill
+            className="object-contain object-center scale-150"
+            priority
+          />
         </div>
-        <p className="text-[12px] leading-[1.4] text-primary-foreground/70 font-inter-tight text-center">
-          ©2026 Copyright FIT.AI. Todos os direitos reservados
-        </p>
+
+        <div className="absolute left-1/2 -translate-x-1/2 top-[48px] w-[85px] h-[38px]">
+          <Image src="/fit-ai-logo.svg" alt="FIT.AI" fill />
+        </div>
+
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-[max(2.5rem,env(safe-area-inset-bottom))] px-5 flex flex-col gap-[60px] items-center">
+          <div className="flex flex-col gap-6 items-center w-full">
+            <p className="text-[32px] leading-[1.05] font-semibold text-primary-foreground text-center w-full font-inter-tight">
+              O app que vai transformar a forma como você treina.
+            </p>
+            <AuthButton />
+          </div>
+          <p className="text-[12px] leading-[1.4] text-primary-foreground/70 font-inter-tight text-center">
+            ©2026 Copyright FIT.AI. Todos os direitos reservados
+          </p>
+        </div>
       </div>
-    </div>
+
+      <div className="hidden md:flex min-h-dvh">
+        <div className="relative flex-1 overflow-hidden">
+          <Image
+            alt=""
+            src="/login-bg.png"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        <div className="flex flex-1 flex-col items-center justify-center bg-primary px-12">
+          <div className="flex w-full max-w-md flex-col items-center gap-12">
+            <Image src="/fit-ai-logo.svg" alt="FIT.AI" width={100} height={44} />
+
+            <div className="flex flex-col gap-6 items-center w-full">
+              <p className="text-[36px] leading-[1.05] font-semibold text-primary-foreground text-center w-full font-inter-tight">
+                O app que vai transformar a forma como você treina.
+              </p>
+              <AuthButton />
+            </div>
+
+            <p className="text-[12px] leading-[1.4] text-primary-foreground/70 font-inter-tight text-center">
+              ©2026 Copyright FIT.AI. Todos os direitos reservados
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
 
