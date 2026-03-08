@@ -74,7 +74,7 @@ export default async function WorkoutDayPage({
   const weekDayLabelUpper = weekDayLabel.toUpperCase();
 
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24 md:ml-60 md:pb-8">
       <div className="flex w-full flex-col gap-5 p-5">
         <div className="flex w-full items-center justify-between">
           <Button variant="ghost" size="icon" asChild>
@@ -144,7 +144,7 @@ export default async function WorkoutDayPage({
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full md:grid md:grid-cols-2">
           {workoutDay.exercises
             .sort((a, b) => a.order - b.order)
             .map((exercise) => (

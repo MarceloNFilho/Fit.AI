@@ -27,9 +27,9 @@ interface MonthSpan {
   colSpan: number;
 }
 
-function buildHeatmapData() {
+function buildHeatmapData(monthsBack: number) {
   const today = dayjs();
-  const startMonth = today.subtract(2, "month").startOf("month");
+  const startMonth = today.subtract(monthsBack, "month").startOf("month");
   const endMonth = today.endOf("month");
 
   let current = startMonth;
@@ -78,12 +78,14 @@ function buildHeatmapData() {
 
 interface ConsistencyHeatmapProps {
   consistencyByDay: GetStats200ConsistencyByDay;
+  monthsBack?: number;
 }
 
 export function ConsistencyHeatmap({
   consistencyByDay,
+  monthsBack = 2,
 }: ConsistencyHeatmapProps) {
-  const { allWeeks, monthSpans, totalColumns } = buildHeatmapData();
+  const { allWeeks, monthSpans, totalColumns } = buildHeatmapData(monthsBack);
 
   return (
     <div className="w-full rounded-xl border border-border p-4">

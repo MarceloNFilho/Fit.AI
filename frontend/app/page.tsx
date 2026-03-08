@@ -33,7 +33,7 @@ export default async function Home() {
   const userName = session.data.user.name?.split(" ")[0] ?? "";
 
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24 md:ml-60 md:pb-8">
       <div className="relative flex h-[296px] w-full flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pb-10 pt-5">
         <div className="absolute inset-0 pointer-events-none">
           <Image
@@ -52,7 +52,7 @@ export default async function Home() {
           />
         </div>
 
-        <p className="relative text-[22px] font-normal uppercase leading-[1.15] text-background font-anton">
+        <p className="relative text-[22px] font-normal uppercase leading-[1.15] text-background font-anton md:text-transparent">
           Fit.ai
         </p>
 
@@ -97,53 +97,58 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-3 items-start px-5 pt-5">
-        <div className="flex w-full items-center justify-between">
-          <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
-            Consistência
-          </p>
-          <Link href="/stats" className="text-xs leading-[1.4] text-primary font-inter-tight">
-            Ver histórico
-          </Link>
-        </div>
-        <ConsistencyWeek
-          consistencyByDay={consistencyByDay}
-          workoutStreak={workoutStreak}
-        />
-      </div>
-
-      <div className="flex w-full flex-col gap-3 items-start p-5">
-        <div className="flex w-full items-center justify-between">
-          <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
-            Treino de Hoje
-          </p>
-          {todayWorkoutDay && (
+      <div className="flex w-full flex-col md:grid md:grid-cols-2 md:gap-6 md:px-5 md:pt-5">
+        <div className="flex w-full flex-col gap-3 items-start px-5 pt-5 md:px-0 md:pt-0">
+          <div className="flex w-full items-center justify-between">
+            <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
+              Consistência
+            </p>
             <Link
-              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}`}
+              href="/stats"
               className="text-xs leading-[1.4] text-primary font-inter-tight"
             >
-              Ver treinos
+              Ver histórico
             </Link>
+          </div>
+          <ConsistencyWeek
+            consistencyByDay={consistencyByDay}
+            workoutStreak={workoutStreak}
+          />
+        </div>
+
+        <div className="flex w-full flex-col gap-3 items-start p-5 md:p-0">
+          <div className="flex w-full items-center justify-between">
+            <p className="text-lg font-semibold leading-[1.4] text-foreground font-inter-tight">
+              Treino de Hoje
+            </p>
+            {todayWorkoutDay && (
+              <Link
+                href={`/workout-plans/${todayWorkoutDay.workoutPlanId}`}
+                className="text-xs leading-[1.4] text-primary font-inter-tight"
+              >
+                Ver treinos
+              </Link>
+            )}
+          </div>
+          {todayWorkoutDay && !todayWorkoutDay.isRest ? (
+            <Link
+              href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
+              className="w-full"
+            >
+              <WorkoutDayCard
+                name={todayWorkoutDay.name}
+                weekDay={todayWorkoutDay.weekDay}
+                estimatedDurationInSeconds={
+                  todayWorkoutDay.estimatedDurationInSeconds
+                }
+                exercisesCount={todayWorkoutDay.exercisesCount}
+                coverImageUrl={todayWorkoutDay.coverImageUrl}
+              />
+            </Link>
+          ) : (
+            <RestDayCard weekDay={todayWorkoutDay?.weekDay ?? ""} />
           )}
         </div>
-        {todayWorkoutDay && !todayWorkoutDay.isRest ? (
-          <Link
-            href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
-            className="w-full"
-          >
-            <WorkoutDayCard
-              name={todayWorkoutDay.name}
-              weekDay={todayWorkoutDay.weekDay}
-              estimatedDurationInSeconds={
-                todayWorkoutDay.estimatedDurationInSeconds
-              }
-              exercisesCount={todayWorkoutDay.exercisesCount}
-              coverImageUrl={todayWorkoutDay.coverImageUrl}
-            />
-          </Link>
-        ) : (
-          <RestDayCard weekDay={todayWorkoutDay?.weekDay ?? ""} />
-        )}
       </div>
 
       <BottomNav activePage="home" />

@@ -17,22 +17,26 @@ const AuthPage = async () => {
   }
 
   return (
-    <div className="relative min-h-dvh bg-auth-bg overflow-hidden">
+    <div className="relative min-h-dvh bg-auth-bg overflow-hidden md:flex md:flex-col md:items-center md:justify-center">
       <div aria-hidden="true" className="absolute inset-0 pointer-events-none">
         <Image
           alt=""
           src="/login-bg.png"
           fill
-          className="object-contain object-center scale-150"
+          className="object-contain object-center max-md:scale-150"
           priority
         />
       </div>
 
-      <div className="absolute left-1/2 -translate-x-1/2 top-[48px] w-[85px] h-[38px]">
+      <div className="absolute left-1/2 -translate-x-1/2 top-[48px] w-[85px] h-[38px] md:hidden">
         <Image src="/fit-ai-logo.svg" alt="FIT.AI" fill />
       </div>
 
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-[max(2.5rem,env(safe-area-inset-bottom))] px-5 flex flex-col gap-[60px] items-center">
+      <div className="hidden md:block relative mb-8">
+        <Image src="/fit-ai-logo.svg" alt="FIT.AI" width={85} height={38} />
+      </div>
+
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[402px] max-w-full bg-primary rounded-t-[20px] pt-12 pb-[max(2.5rem,env(safe-area-inset-bottom))] px-5 flex flex-col gap-[60px] items-center md:relative md:bottom-auto md:left-auto md:translate-x-0 md:rounded-[20px] md:pb-10">
         <div className="flex flex-col gap-6 items-center w-full">
           <p className="text-[32px] leading-[1.05] font-semibold text-primary-foreground text-center w-full font-inter-tight">
             O app que vai transformar a forma como você treina.

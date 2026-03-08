@@ -7,7 +7,7 @@ export default function WorkoutDayLoading() {
         <PageSkeleton.WorkoutDayHeader />
         <PageSkeleton.WorkoutDayCover />
 
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 w-full md:grid md:grid-cols-2">
           <PageSkeleton.ExerciseCard />
           <PageSkeleton.ExerciseCard />
           <PageSkeleton.ExerciseCard />

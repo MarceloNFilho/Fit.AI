@@ -51,8 +51,8 @@ export default async function WorkoutPlanPage({
   );
 
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
-      <div className="relative flex h-[296px] w-full flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pb-10 pt-5">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24 md:ml-60 md:pb-8">
+      <div className="relative flex h-[296px] w-full flex-col items-start justify-between overflow-hidden rounded-b-[20px] px-5 pb-10 pt-5 md:rounded-none">
         <div className="absolute inset-0 pointer-events-none">
           <Image
             alt=""
@@ -89,7 +89,7 @@ export default async function WorkoutPlanPage({
         </div>
       </div>
 
-      <div className="flex w-full flex-col gap-3 p-5">
+      <div className="flex w-full flex-col gap-3 p-5 md:grid md:grid-cols-2 lg:grid-cols-3">
         {sortedDays.map((day) =>
           day.isRestDay ? (
             <RestDayCard key={day.id} weekDay={day.weekDay} />

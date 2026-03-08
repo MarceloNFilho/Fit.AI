@@ -97,14 +97,14 @@ export function Chatbot() {
   const isLoading = status === "submitted" || isStreaming;
 
   return (
-    <div className="fixed inset-0 z-60">
+    <div className="fixed inset-0 z-60 md:left-60">
       <div
         className="absolute inset-0 bg-foreground/30"
         onClick={handleClose}
       />
 
-      <div className="absolute inset-x-4 bottom-4 top-40 flex flex-col">
-        <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] bg-background">
+      <div className="absolute inset-x-4 bottom-4 top-40 flex flex-col md:left-auto md:right-8 md:bottom-8 md:top-8 md:w-[420px]">
+        <div className="flex flex-1 flex-col overflow-hidden rounded-[20px] bg-background md:shadow-xl md:border md:border-border">
           <div className="flex shrink-0 items-center justify-between border-b border-border p-5">
             <div className="flex items-center gap-2">
               <div className="flex items-center justify-center rounded-full border border-primary/8 bg-primary/8 p-3">

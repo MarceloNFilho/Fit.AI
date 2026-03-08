@@ -8,7 +8,7 @@ export default function ProfileLoading() {
       <div className="flex w-full flex-col items-center gap-5 p-5 flex-1">
         <PageSkeleton.ProfileSection />
 
-        <div className="grid w-full grid-cols-2 gap-3">
+        <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4">
           <PageSkeleton.StatCard />
           <PageSkeleton.StatCard />
           <PageSkeleton.StatCard />

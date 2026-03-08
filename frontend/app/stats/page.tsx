@@ -36,7 +36,7 @@ export default async function StatsPage() {
   await checkOnboarding();
 
   const today = dayjs();
-  const from = today.subtract(2, "month").startOf("month").format("YYYY-MM-DD");
+  const from = today.subtract(7, "month").startOf("month").format("YYYY-MM-DD");
   const to = today.endOf("day").format("YYYY-MM-DD");
 
   const statsResponse = await getStats({ from, to });
@@ -56,8 +56,8 @@ export default async function StatsPage() {
   console.log(statsResponse.data);
 
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
-      <div className="flex h-14 w-full items-center px-5">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24 md:ml-60 md:pb-8">
+      <div className="flex h-14 w-full items-center px-5 md:hidden">
         <p className="text-[22px] font-normal uppercase leading-[1.15] text-foreground font-anton">
           Fit.ai
         </p>
@@ -72,9 +72,20 @@ export default async function StatsPage() {
           Consistência
         </p>
 
-        <ConsistencyHeatmap consistencyByDay={consistencyByDay} />
+        <div className="md:hidden">
+          <ConsistencyHeatmap
+            consistencyByDay={consistencyByDay}
+            monthsBack={2}
+          />
+        </div>
+        <div className="hidden md:block">
+          <ConsistencyHeatmap
+            consistencyByDay={consistencyByDay}
+            monthsBack={7}
+          />
+        </div>
 
-        <div className="flex gap-3">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
           <StatCard
             icon={CircleCheck}
             value={String(completedWorkoutsCount)}
@@ -85,13 +96,14 @@ export default async function StatsPage() {
             value={`${Math.round(conclusionRate * 100)}%`}
             label="Taxa de conclusão"
           />
+          <div className="col-span-2 md:col-span-1">
+            <StatCard
+              icon={Hourglass}
+              value={formatTotalTime(totalTimeInSeconds)}
+              label="Tempo Total"
+            />
+          </div>
         </div>
-
-        <StatCard
-          icon={Hourglass}
-          value={formatTotalTime(totalTimeInSeconds)}
-          label="Tempo Total"
-        />
       </div>
 
       <BottomNav activePage="stats" />

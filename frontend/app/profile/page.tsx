@@ -33,8 +33,8 @@ export default async function ProfilePage() {
   const userImage = session.data.user.image;
 
   return (
-    <div className="flex min-h-dvh flex-col items-center bg-background pb-24">
-      <div className="flex h-14 w-full items-center px-5">
+    <div className="flex min-h-dvh flex-col items-center bg-background pb-24 md:ml-60 md:pb-8">
+      <div className="flex h-14 w-full items-center px-5 md:hidden">
         <p className="text-[22px] font-normal uppercase leading-[1.15] text-foreground font-anton">
           Fit.ai
         </p>
@@ -69,7 +69,7 @@ export default async function ProfilePage() {
           </div>
         </div>
 
-        <div className="grid w-full grid-cols-2 gap-3">
+        <div className="grid w-full grid-cols-2 gap-3 md:grid-cols-4">
           <StatCard
             icon={Weight}
             value={

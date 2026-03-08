@@ -30,14 +30,14 @@ export function ConsistencyWeek({
           const isCompleted = status?.workoutDayCompleted ?? false;
           const isStarted = status?.workoutDayStarted ?? false;
 
-          let squareClassName = "size-5 rounded-md border border-border";
+          let squareClassName = "size-6 rounded-md border border-border";
 
           if (isCompleted) {
-            squareClassName = "size-5 rounded-md bg-chart-2";
+            squareClassName = "size-6 rounded-md bg-chart-2";
           } else if (isStarted) {
-            squareClassName = "size-5 rounded-md bg-chart-2/25";
+            squareClassName = "size-6 rounded-md bg-chart-2/25";
           } else if (day.isToday) {
-            squareClassName = "size-5 rounded-md border-[1.6px] border-chart-2";
+            squareClassName = "size-6 rounded-md border-[1.6px] border-chart-2";
           }
 
           return (
