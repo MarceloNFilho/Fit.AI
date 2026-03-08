@@ -174,9 +174,9 @@ function ConsistencyHeatmapWide() {
           <Skeleton className="h-3 w-6 ml-auto" />
           <Skeleton className="h-3 w-6 ml-auto" />
         </div>
-        {Array.from({ length: 7 }).map((_, row) => (
+        {Array.from({ length: 8 }).map((_, row) => (
           <div key={row} className="flex gap-1">
-            {Array.from({ length: 26 }).map((_, col) => (
+            {Array.from({ length: 35 }).map((_, col) => (
               <Skeleton key={col} className="aspect-square flex-1 rounded-md" />
             ))}
           </div>

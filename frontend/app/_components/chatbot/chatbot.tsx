@@ -99,7 +99,7 @@ export function Chatbot() {
   return (
     <div className="fixed inset-0 z-60 md:left-60">
       <div
-        className="absolute inset-0 bg-foreground/30"
+        className="absolute inset-0 max-sm:bg-foreground/30"
         onClick={handleClose}
       />
 

@@ -70,7 +70,7 @@ export default async function WorkoutPlanPage({
           />
         </div>
 
-        <p className="relative text-[22px] font-normal uppercase leading-[1.15] text-background font-anton">
+        <p className="relative text-[22px] font-normal uppercase leading-[1.15] text-background font-anton md:text-transparent">
           Fit.ai
         </p>
 
