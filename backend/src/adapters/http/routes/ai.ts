@@ -1,4 +1,5 @@
-import { openai } from "@ai-sdk/openai";
+import { google } from "@ai-sdk/google";
+// import { openai } from "@ai-sdk/openai";
 import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 import type { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -93,7 +94,7 @@ export const aiRoutes = async (app: FastifyInstance) => {
       const messages = request.body.messages as unknown as UIMessage[];
 
       const result = streamText({
-        model: openai("gpt-4o-mini"),
+        model: google("gemini-2.5-flash"),
         system: SYSTEM_PROMPT,
         tools: {
           getUserTrainData: {
